@@ -1,0 +1,6 @@
+dist/
+node_modules
+assets/
+package-lock.json
+.DS_Store
+bundle.js
