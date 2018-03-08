@@ -1,0 +1,16 @@
+.linechart-circle:hover {
+  cursor: pointer;
+  fill: #3ebdb2; }
+
+div.tooltip {
+  position: absolute;
+  text-align: left;
+  width: auto;
+  height: auto;
+  padding: 8px;
+  font: 12px sans-serif;
+  background: black;
+  border-radius: 0px;
+  pointer-events: none;
+  color: white; }
+

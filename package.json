@@ -13,6 +13,7 @@
     "d3": "^4.13.0",
     "express": "^4.16.2",
     "jquery": "^3.3.1",
+    "node-sass": "^4.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
@@ -24,6 +25,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "webpack": "./node_modules/webpack/bin/webpack.js",
+    "build:css": "node-sass -w -r public/css/scss/ -o public/css",
     "build": "npm run webpack -- -w & nodemon --ignore src/ --ignore dist/ server.js"
   },
   "keywords": [],
