@@ -13,4 +13,9 @@ div.tooltip {
   border-radius: 0px;
   pointer-events: none;
   color: white; }
+  div.tooltip span {
+    font-size: 1.5em; }
 
+.content {
+  height: 80vh;
+  margin: 15% 0; }

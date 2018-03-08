@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
+import BubbleChart from './BubbleChart';
 
 class LineChart extends Component {
   constructor(){
     super();
+    this.state = {
+      clicked: false,
+      selectedDate: ""
+    }
     this.drawLines = this.drawLines.bind(this);
   }
 
@@ -128,22 +133,35 @@ class LineChart extends Component {
             .duration(500).style("stroke-width", 0);
         })
         .on("click", d => {
-          console.log('clicked!')
+          this.setState({ clicked: true, selectedDate: d.openDate })
         }); 
-        
-
     })
   }
 
-
   render(){
+    const { data } = this.props;
+    const { clicked, selectedDate } = this.state;
+    const selectedData = data.filter(d => {
+      console.log(d.openDate === selectedDate)
+      return d.openDate == selectedDate
+    })
+    console.log("selectedData", selectedData)
+
     return (
-      <div className="row">
-        <div className="col-md-4 text">
-          <h3>How was the movie business in general between 2014 and 2016?</h3>
-          <p>It seems like the movie sales peaked in June and December. Click on a circle to show which movies/genres were doing well on these high peak days.</p>
-        </div> 
-        <div className="col-md-8 linechart"></div>
+      <div className="content">
+        <div className="row">
+          <div className="col-md-4 text">
+            <h3>How was the movie business in general between 2014 and 2016?</h3>
+            <p>It seems like the movie sales peaked in June and December. 
+            Click on a circle to show which movies/genres were doing well on these high peak days.</p>
+          </div> 
+          <div className="col-md-8 linechart"></div>
+        </div>
+        <div>
+        {
+          clicked ? <BubbleChart data={ data } selectedData={ selectedData } /> : ""
+        }
+        </div>
       </div>
     )
   }
