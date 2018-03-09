@@ -21,13 +21,12 @@ class LineChart extends Component {
 
   handleCircleClick(data){
     if(this.state.circleClicked){
-      this.setState({ circleClicked: false, selectedDate: "" })
+      this.setState({ circleClicked: false, selectedDate: "" });
     }
-    this.setState({ circleClicked: true, selectedDate: data })
+    this.setState({ circleClicked: true, selectedDate: data });
 
     const scrollHeight = $(".home").height() + $(".timetrend").height() + 100;
     $("html, body").animate({ scrollTop: scrollHeight }, 600);
-
   }
 
   drawLines(){
@@ -40,29 +39,12 @@ class LineChart extends Component {
         d.openingGross = +d.opening_gross;
         d.totalGross = +d.total_gross;
       })
-      
-      const dateFormat = d3.timeFormat("%b %d, %Y")
-      const margin = { top: 20, right: 50, bottom: 50, left: 100 };
-      const width = 700 - margin.left - margin.right, 
-        height = 400 - margin.top - margin.bottom;
 
-      const svg = d3.select(".linechart").append("svg").attr("class", "linechart")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom);
-      
-      const g = svg.append("g").attr("class", "g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      const tooltip = d3.select("body").append("div")   
-        .attr("class", "tooltip")               
-        .style("opacity", 0);
-
+      const { dateFormat, margin, width, height, svg, g, tooltip } = this.props.setupFunc("linechart", 400);
       const x = d3.scaleTime().range([0, width]), y = d3.scaleLinear().range([height, 0]); 
       const min = d3.min(data, d => d.totalGross), max = d3.max(data, d => d.totalGross);
 
-      const xExtent = d3.extent(data, d => d.openDate),
-        yExtent = d3.extent(data, d => d.totalGross);
-
+      const xExtent = d3.extent(data, d => d.openDate), yExtent = d3.extent(data, d => d.totalGross);
       x.domain(xExtent);
       y.domain(d3.extent([0, max]));
 
@@ -144,7 +126,7 @@ class LineChart extends Component {
   }
 
   render(){
-    const { data } = this.props;
+    const { data, setupFunc } = this.props;
     const { circleClicked, selectedDate } = this.state;
 
     return (
@@ -165,7 +147,7 @@ class LineChart extends Component {
         </div>
         <div>
         {
-          circleClicked ? <BubbleChart data={ data } selectedDate={ selectedDate } /> : ""
+          circleClicked ? <BubbleChart data={ data } selectedDate={ selectedDate } setupFunc={ setupFunc } /> : ""
         }
         </div>
       </div>

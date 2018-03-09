@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
-import Badge from 'material-ui/Badge';
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import StudioChart from './StudioChart';
@@ -27,26 +26,19 @@ class BubbleChart extends Component {
 
   handleBubbleClick(data){
     if(this.state.bubbleClicked){
-      this.setState({ bubbleClicked: false, selectedTitle: "" })
+      this.setState({ bubbleClicked: false, selectedTitle: "" });
     }
-    this.setState({ bubbleClicked: true, selectedTitle: data })
+    this.setState({ bubbleClicked: true, selectedTitle: data });
 
     const scrollHeight = $(".home").height() + $(".timetrend").height() + $(".movie-titles").height() + 100;
     $("html, body").animate({ scrollTop: scrollHeight }, 600);
   }
 
   drawBubbles(){
-    const { data, selectedDate } = this.props;
+    const { data, selectedDate, setupFunc } = this.props;
     const { selectedGenre } = this.state;
-    const dateFormat = d3.timeFormat("%-m/%-d/%y")
-
-    const margin = { top: 20, right: 20, bottom: 20, left: 20 },
-      width = 700 - margin.left - margin.right, 
-      height = 700 - margin.top - margin.bottom;
-    
-    const svg = d3.select(".bubblechart").append("svg").attr("class", "bubblechart")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom);
+    const dateFormat = d3.timeFormat("%-m/%-d/%y");
+    const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 700);
 
     // console.log(new Set(data.map(d => d.genre)).size) // 42 unque genres
 
@@ -57,17 +49,15 @@ class BubbleChart extends Component {
       } else {
         genres[d.genre] = 1;
       }
-    })
+    });
 
-    const majorGenres = Object.keys(genres).filter(genre => genres[genre] >= 9) 
+    const majorGenres = Object.keys(genres).filter(genre => genres[genre] >= 9);
     const colorRange8 = ["#b1457b", "#56ae6c", "#5d398b", "#a8a53f", "#6c81d9", "#b86b35", "#ca73c6", "#ba464e"];
-
-    this.setState({majorGenres, allGenres: genres, colorRange: colorRange8}) 
+    this.setState({majorGenres, allGenres: genres, colorRange: colorRange8});
     
-    const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange8);
-    const tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);  
+    const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange8);    
     const pack = d3.pack().size([width, height]).padding(1.5);
-    const root = d3.hierarchy({ children: data }).sum(d => d.totalGross)
+    const root = d3.hierarchy({ children: data }).sum(d => d.totalGross);
 
     const node = svg.selectAll(".node")
       .data(pack(root).leaves())
@@ -87,7 +77,7 @@ class BubbleChart extends Component {
       })
       .on("mouseover", function(d) {
         d3.select(this).transition().ease(d3.easeCubicInOut)
-          .duration(200).style("opacity", 1)
+          .duration(200).style("opacity", 1);
 
         tooltip.html(`<span>${d.data.title}</span><br />
             Total gross: $${Math.round(d.data.totalGross/1000000)}M<br/>
@@ -102,7 +92,7 @@ class BubbleChart extends Component {
         d3.select(this).transition().ease(d3.easeCubicInOut)
           .duration(200).style("opacity", 0.2);
       })
-      .on("click", d => this.handleBubbleClick(d.data.title))
+      .on("click", d => this.handleBubbleClick(d.data.title));
 
     // add bubble labels on selected circles
     node.append("text")
@@ -110,17 +100,18 @@ class BubbleChart extends Component {
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
       .text(d => {
-        return dateFormat(d.data.openDate) === dateFormat(selectedDate) ? d.data.title : ""
+        return dateFormat(d.data.openDate) === dateFormat(selectedDate) ? d.data.title : "";
       });
 
-    d3.select(".info").append("html").html(`<em>*Highlighting movies opened on ${dateFormat(selectedDate)}</em>`)
+    d3.select(".info").append("html").html(`<em>*Highlighting movies opened on ${dateFormat(selectedDate)}</em>`);
  
   } 
 
+  // aggregate genre table with color and count, and add 'others' genre
   getGenreTable(){
     const { majorGenres, allGenres, colorRange } = this.state;
     
-    function getColor(genreArr, colorArr){
+    function getTable(genreArr, colorArr){
       let returnData = [];
       for(let i=0; i<genreArr.length; i++){
         let _genres = {};
@@ -142,16 +133,15 @@ class BubbleChart extends Component {
       return count;
     }
 
-    const dataTable = getColor(majorGenres, colorRange);
+    const dataTable = getTable(majorGenres, colorRange);
     const otherCount = Object.keys(allGenres).length - dataTable.length;
     dataTable.push({"genre": "Others", "color": "#000", "count": otherCount})
-    dataTable.sort((a, b) => b.count - a.count)
-    return dataTable;
+    return dataTable.sort((a, b) => b.count - a.count);
   }
 
   render(){
     const { bubbleClicked, selectedTitle } = this.state;
-    const { data } = this.props;
+    const { data, setupFunc } = this.props;
     const genres = this.getGenreTable();
 
     return (
@@ -190,7 +180,7 @@ class BubbleChart extends Component {
         </div>
         <div>
         {
-          bubbleClicked ? <StudioChart data={ data } selectedTitle={ selectedTitle } /> : ""
+          bubbleClicked ? <StudioChart data={ data } selectedTitle={ selectedTitle } setupFunc={ setupFunc } /> : ""
         }
         </div>
       </div>
