@@ -2,11 +2,14 @@
 
 @import '_chart.scss';
 
-.content{
-  height: 100vh;
-  padding: 15% 0
+.content{ 
+  padding: 8% 5%
 }
+
 .home{
-  float: right;
-  padding-top: 15%;
+  height: 90vh;
+  padding-top: calc(90vh/3);
+  text-align: center;
 }
+
+

@@ -8,8 +8,7 @@ class Main extends Component {
   constructor(){
     super()
     this.state = { 
-      data: [], 
-      // dataByOpening$: [], dataByTotal$: [] 
+      data: []
     }
   }
   componentDidMount(){
@@ -24,10 +23,6 @@ class Main extends Component {
         d.totalGross = +d.total_gross;
       })
 
-      // const dataByDateAndStudio = d3.nest().key(d => d.openDate).key(d => d.studio).entries(data)
-      // const dataByOpening$ = d3.nest().key(d => d.openingGross).entries(data);
-      // const dataByTotal$ = d3.nest().key(d => d.totalGross).entries(data);
-
       this.setState({ data })
     })
   }
@@ -36,7 +31,7 @@ class Main extends Component {
     const { data } = this.state;
 
     return (
-      <div className="container">
+      <div>
         <Home />
         <LineChart data={ data } />
       </div>
