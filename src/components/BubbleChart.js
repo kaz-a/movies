@@ -14,14 +14,40 @@ class BubbleChart extends Component {
       majorGenres: {},
       allGenres: {},
       colorRange: [],
+      clickedGenre: "",
+      chipClicked: false
     }
     this.drawBubbles = this.drawBubbles.bind(this);
     this.getGenreTable = this.getGenreTable.bind(this);
     this.handleBubbleclick = this.handleBubbleClick.bind(this);
+    this.handleChipClick = this.handleChipClick.bind(this);
   }
 
   componentDidMount(){
     this.drawBubbles();
+  }
+
+  handleChipClick(e){
+    const { data } = this.props;
+    const _data = d3.nest().key(d => d.genre).rollup(f => d3.sum(f, d => +d.total_gross)).entries(data);
+    
+    // create others table with aggregated totals
+    const genres = this.getGenreTable().map(d => d.genre);
+    const others = _data.filter(d => genres.indexOf(d.key) < 0);
+  
+    let arr = [];
+    others.forEach(i => { arr.push(i.value) });
+    const othersSum = arr.reduce((a, b) => a + b);
+
+    let sumTotal;
+    if(e.genre === "Others"){
+      sumTotal = othersSum;
+    } else {
+      sumTotal = _data.filter(d => d.key === e.genre)[0].value;
+    }
+    
+    this.setState({ chipClicked: true, clickedGenre: e.genre });   
+    d3.select(".genre-total").html(`${e.genre}'s gross total was $${Math.round(sumTotal/1000000000)}B`);
   }
 
   handleBubbleClick(data){
@@ -36,12 +62,11 @@ class BubbleChart extends Component {
 
   drawBubbles(){
     const { data, selectedDate, setupFunc } = this.props;
-    const { selectedGenre } = this.state;
+    const { selectedGenre, clickedGenre, chipClicked } = this.state;
     const dateFormat = d3.timeFormat("%-m/%-d/%y");
     const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 700);
 
     // console.log(new Set(data.map(d => d.genre)).size) // 42 unque genres
-
     let genres = {};
     data.forEach(d => {
       if(genres[d.genre]){
@@ -165,7 +190,7 @@ class BubbleChart extends Component {
                   const style = {backgroundColor: genre.color, margin: 3};
                   return (
                     <div key={genre.genre} style={{display: "inline-block"}}>
-                      <Chip style={style} labelColor="#fff">
+                      <Chip style={style} labelColor="#fff" onClick={(e)=>this.handleChipClick(genre)}>
                         <Avatar size={18} backgroundColor={genre.color} style={{opacity: 0.5}}>
                           {genre.count}</Avatar>{genre.genre}
                       </Chip>
@@ -174,6 +199,7 @@ class BubbleChart extends Component {
                 })
               }
               </div>
+              <div className="genre-total"></div>
             </div> 
             <div className="col-md-8 bubblechart"></div>
           </div>
