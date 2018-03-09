@@ -25,6 +25,19 @@ div.tooltip {
   }      
 }
 
+span.color-text{
+  &:first-child{
+    color: $cyan;
+  }
+  &:nth-child(2){
+    color: $mustard;
+  }
+  &:last-child{
+    color: $navy;
+  }
+}
+
+
 .bubble-label {
   font-size: 0.5em;
   fill: $white;

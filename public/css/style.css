@@ -19,14 +19,23 @@ div.tooltip {
   div.tooltip span {
     font-size: 1.5em; }
 
+span.color-text:first-child {
+  color: #3ebdb2; }
+
+span.color-text:nth-child(2) {
+  color: #b49a3d; }
+
+span.color-text:last-child {
+  color: #023460; }
+
 .bubble-label {
   font-size: 0.5em;
   fill: #fff; }
 
 .content {
-  padding: 8% 5%; }
+  padding: 5% 5%; }
 
 .home {
-  height: 90vh;
+  height: 100vh;
   padding-top: calc(90vh/3);
   text-align: center; }

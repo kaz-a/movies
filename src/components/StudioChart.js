@@ -98,13 +98,13 @@ class StudioChart extends Component {
   
   render(){
     return(
-      <div className="content">
+      <div className="content studios">
         <div className="row">
           <div className="col-md-4 text">
             <h3>Which studio did well and how did it perform against others?</h3>
             <p>Many of the major money-generating movies seem to come out of BV, followed by Universal, Fox, and WB. 
-            BV was particularly doing well thanks to all the popularity of Star Wars, which generated nearly $1B.
-            <span className="studioinfo"></span>
+            BV was particularly doing well thanks to all the popularity of Star Wars, which in total generated nearly $1.5B.
+            <span className="studioinfo"></span>(change hightlight by selecting another movie on bubble chart)
             </p>
           </div> 
           <div className="col-md-8 studiochart"></div>

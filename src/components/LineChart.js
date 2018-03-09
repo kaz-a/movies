@@ -24,6 +24,10 @@ class LineChart extends Component {
       this.setState({ circleClicked: false, selectedDate: "" })
     }
     this.setState({ circleClicked: true, selectedDate: data })
+
+    const scrollHeight = $(".home").height() + $(".timetrend").height() + 100;
+    $("html, body").animate({ scrollTop: scrollHeight }, 600);
+
   }
 
   drawLines(){
@@ -103,7 +107,7 @@ class LineChart extends Component {
           .datum(data)
           .attr("class", "linechart-opening")
           .attr("fill", "none")
-          .attr("stroke", "#C6BB8C")
+          .attr("stroke", "#f54e56")
           .attr("stroke-linejoin", "round")
           .attr("stroke-linecap", "round")
           .attr("stroke-width", 1.5)
@@ -113,12 +117,13 @@ class LineChart extends Component {
       g.selectAll("circle")
         .data(data)
         .enter().append("circle")
-        .filter(d => d.totalGross >= 300000000)
+        // .filter(d => d.totalGross >= 300000000)
         .attr("class", "linechart-circle")
-        .attr("r", 5)
+        .attr("r", 3.5)
         .attr("cx", d => x(d.openDate))
         .attr("cy", d => y(d.totalGross))  
-        .attr("fill", "#3ebdb2")
+        // .attr("fill", "#3ebdb2")
+        .attr("fill", d => d.totalGross >= 300000000 ? "#3ebdb2" : d.totalGross >= 100000000 ? "#b49a3d" : "#023460")
         .attr("stroke", "#3ebdb2")
         .on("mouseover", function(d) {
           d3.select(this).transition().ease(d3.easeCubicInOut)
@@ -144,12 +149,14 @@ class LineChart extends Component {
 
     return (
       <div>
-        <div className="content">
+        <div className="content timetrend">
           <div className="row">
             <div className="col-md-4 text">
               <h3>How was the movie business in general between 2014 and 2016?</h3>
-              <p>It seems like the total gross sales peaked in June and December of each year. 
-              Cicles are placed on the days when the total gross $ was greater than $300M.
+              <p>Generally the total gross peaked in June and December of each year. 
+              <span className="color-text"> Blue cicles</span> are placed on the days when the total gross $ was greater than $300M, 
+              <span className="color-text"> yellow circles</span> on days greater than $100M, and 
+              <span className="color-text"> dark circles</span> on less than $100M.
               Click on a circle to show which movies/genres were doing well on these peak days.</p>
               <RaisedButton className="line-btn" label="Show Opening Gross $" default={true} style={{margin:12}} />
             </div> 

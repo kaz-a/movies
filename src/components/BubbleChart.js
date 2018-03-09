@@ -30,6 +30,9 @@ class BubbleChart extends Component {
       this.setState({ bubbleClicked: false, selectedTitle: "" })
     }
     this.setState({ bubbleClicked: true, selectedTitle: data })
+
+    const scrollHeight = $(".home").height() + $(".timetrend").height() + $(".movie-titles").height() + 100;
+    $("html, body").animate({ scrollTop: scrollHeight }, 600);
   }
 
   drawBubbles(){
@@ -153,7 +156,7 @@ class BubbleChart extends Component {
 
     return (
       <div>
-        <div className="content">
+        <div className="content movie-titles">
           <div className="row">
             <div className="col-md-4 text">
               <h3>What movies were doing well during these 3 years?</h3>
@@ -163,7 +166,7 @@ class BubbleChart extends Component {
                 Genres with less than 9 releases are categorized as "Others".  
                 Click on a circle to learn which studio released this movie and 
                 how this studio did against others.
-                <span className="info"></span>
+                <span className="info"></span>(change hightlight by selecting another date on line chart)
               </p>
               
               <div className="genres">
