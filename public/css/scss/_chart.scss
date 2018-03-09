@@ -1,9 +1,13 @@
 @import '_colors.scss';
 
-.linechart-circle:hover {
+.linechart-circle:hover{
   cursor: pointer;
   fill: $cyan;
 }
+
+.node:hover{
+  cursor: pointer;
+} 
 
 div.tooltip {   
   position: absolute;           
@@ -19,4 +23,9 @@ div.tooltip {
   span{
     font-size: 1.5em;
   }      
+}
+
+.bubble-label {
+  font-size: 0.5em;
+  fill: $white;
 }

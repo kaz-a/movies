@@ -2,6 +2,9 @@
   cursor: pointer;
   fill: #3ebdb2; }
 
+.node:hover {
+  cursor: pointer; }
+
 div.tooltip {
   position: absolute;
   text-align: left;
@@ -16,6 +19,14 @@ div.tooltip {
   div.tooltip span {
     font-size: 1.5em; }
 
+.bubble-label {
+  font-size: 0.5em;
+  fill: #fff; }
+
 .content {
-  height: 80vh;
-  margin: 15% 0; }
+  height: 100vh;
+  padding: 15% 0; }
+
+.home {
+  float: right;
+  padding-top: 15%; }
