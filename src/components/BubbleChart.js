@@ -17,7 +17,7 @@ class BubbleChart extends Component {
       colorRange: [],
     }
     this.drawBubbles = this.drawBubbles.bind(this);
-    this.getGenreInfo = this.getGenreInfo.bind(this);
+    this.getGenreTable = this.getGenreTable.bind(this);
     this.handleBubbleclick = this.handleBubbleClick.bind(this);
   }
 
@@ -99,7 +99,7 @@ class BubbleChart extends Component {
         d3.select(this).transition().ease(d3.easeCubicInOut)
           .duration(200).style("opacity", 0.2);
       })
-      .on("click", d => this.handleBubbleClick(d.title))
+      .on("click", d => this.handleBubbleClick(d.data.title))
 
     // add bubble labels on selected circles
     node.append("text")
@@ -110,11 +110,11 @@ class BubbleChart extends Component {
         return dateFormat(d.data.openDate) === dateFormat(selectedDate) ? d.data.title : ""
       });
 
-    d3.select(".info").append("html").html(`<em>Highlighting movies opened on ${dateFormat(selectedDate)}</em>`)
+    d3.select(".info").append("html").html(`<em>*Highlighting movies opened on ${dateFormat(selectedDate)}</em>`)
  
   } 
 
-  getGenreInfo(){
+  getGenreTable(){
     const { majorGenres, allGenres, colorRange } = this.state;
     
     function getColor(genreArr, colorArr){
@@ -149,7 +149,7 @@ class BubbleChart extends Component {
   render(){
     const { bubbleClicked, selectedTitle } = this.state;
     const { data } = this.props;
-    const genres = this.getGenreInfo();
+    const genres = this.getGenreTable();
 
     return (
       <div>
@@ -171,7 +171,7 @@ class BubbleChart extends Component {
                 genres && genres.map(genre => {
                   const style = {backgroundColor: genre.color, margin: 3};
                   return (
-                    <div key={genre.genre} style={{display: "flex"}}>
+                    <div key={genre.genre} style={{display: "inline-block"}}>
                       <Chip style={style} labelColor="#fff">
                         <Avatar size={18} backgroundColor={genre.color} style={{opacity: 0.5}}>
                           {genre.count}</Avatar>{genre.genre}

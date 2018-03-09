@@ -13,9 +13,7 @@ class StudioChart extends Component {
   }
 
   drawForceLayout (){
-    const { data, selectedData } = this.props;
-    console.log('selectedData:', selectedData);
-
+    const { data, selectedTitle } = this.props;
     console.log('data', data)
 
     const margin = { top: 20, right: 20, bottom: 20, left: 20 },
