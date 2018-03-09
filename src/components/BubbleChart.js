@@ -109,6 +109,8 @@ class BubbleChart extends Component {
       .text(d => {
         return dateFormat(d.data.openDate) === dateFormat(selectedDate) ? d.data.title : ""
       });
+
+    d3.select(".info").append("html").html(`<em>Highlighting movies opened on ${dateFormat(selectedDate)}</em>`)
  
   } 
 
@@ -156,17 +158,18 @@ class BubbleChart extends Component {
             <div className="col-md-4 text">
               <h3>What movies were doing well during these 3 years?</h3>
               <p>While <em>Star Wars: The Force Awakens</em> had the largest revenue,
-                it was one of the rarest genre of movie made during this period. Less competition? 
+                it was one of the rarest genre of movie made during this period. 
                 Each circle is a movie title, sized by total gross $ and colored by genre.
-                Genres with less than 9 releases are categorized as "Others". 
-                So we can say the titles in Others are rare/less significant. 
+                Genres with less than 9 releases are categorized as "Others".  
                 Click on a circle to learn which studio released this movie and 
                 how this studio did against others.
+                <span className="info"></span>
               </p>
+              
               <div className="genres">
               {
                 genres && genres.map(genre => {
-                  const style = {backgroundColor: genre.color, margin: 4};
+                  const style = {backgroundColor: genre.color, margin: 3};
                   return (
                     <div key={genre.genre} style={{display: "flex"}}>
                       <Chip style={style} labelColor="#fff">
