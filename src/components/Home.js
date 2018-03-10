@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
-const animate = () => {
+const buttonScroll = () => {
   $(".home-button").click(() => {
     const scrollHeight = $(".home").height() + 20;
     $("html, body").animate({ scrollTop: scrollHeight }, 600);
@@ -18,7 +18,7 @@ const Home = () => {
       And what studio should I belong in order to be successful?<br/>
       </p>
       
-      <FloatingActionButton className="home-button" style={{color: "#fff"}} onCick={animate()}>
+      <FloatingActionButton className="home-button" style={{color: "#fff"}} onCick={buttonScroll()}>
         <h4>&#9662;</h4>
       </FloatingActionButton>
     </div>

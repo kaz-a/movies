@@ -49,8 +49,9 @@ class BubbleChart extends Component {
     const classname = `.bubble.${e.genre.replace(/\s|\//g, '')}`;  
     $(classname).css("opacity", 1);
     $(classname).parent().siblings().children().not(classname).css("opacity", 0.2);
-            
-    d3.select(".genre-total").html(`${e.genre}'s gross total was <span>$${Math.round(sumTotal/1000000000 * 100)/100}B</span>`);
+    d3.select(".info").remove();
+          
+    d3.select(".genre-total").html(`${e.genre}'s gross total was<br/><span>$${Math.round(sumTotal/1000000000 * 100)/100}B</span>`);
   }
 
   handleBubbleClick(data){
@@ -66,7 +67,7 @@ class BubbleChart extends Component {
   drawBubbles(){
     const { data, selectedDate, setupFunc } = this.props;
     const dateFormat = d3.timeFormat("%-m/%-d/%y");
-    const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 600);
+    const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 570);
 
     let genres = {};
     data.forEach(d => {
@@ -84,7 +85,7 @@ class BubbleChart extends Component {
     const colorRange15 = ["#cd772c", "#6d71d8", "#92b440", "#563485", "#61c06d", "#bc72ca", "#40af7a", "#b5508f", "#49d2b7", "#bc4862", "#6a8b3c", "#5e8bd5", "#c1a43d", "#b84e39", "#ad7b3c"];
     this.setState({majorGenres, allGenres: genres, genresCutoff, colorRange: colorRange15});
     
-    const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange8);    
+    const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange15);    
     const pack = d3.pack().size([width, height]).padding(1.5);
     const root = d3.hierarchy({ children: data }).sum(d => d.totalGross);
 
@@ -114,7 +115,7 @@ class BubbleChart extends Component {
       .on("mouseout", function(d) {
         tooltip.style("opacity", 0);
         
-          d3.select(this).transition().ease(d3.easeCubicInOut)
+        d3.select(this).transition().ease(d3.easeCubicInOut)
           .duration(200).style("opacity", 0.2);
         
       })
@@ -183,7 +184,7 @@ class BubbleChart extends Component {
             <div className="col-md-4 text">
               <h3>What movies were doing well during these 3 years?</h3>
               <p><em>Star Wars </em>was very popular, and Action / Adventure and Animation made the top revenue. {text}
-                <span className="info"></span>(change hightlight by selecting another date on line chart, or selecting genres below)
+                <span className="info"></span>(change hightlight by selecting another date on line chart or selecting a genre below)
               </p>
               
               <div className="genres">

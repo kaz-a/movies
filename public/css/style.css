@@ -36,7 +36,10 @@ span.color-text:last-child {
   padding-left: 50px; }
 
 .genre-total {
-  text-align: center; }
+  width: 700px;
+  text-align: center;
+  padding-left: 50px;
+  margin-top: -50px; }
   .genre-total span {
     font-size: 2em; }
 
