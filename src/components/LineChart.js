@@ -84,17 +84,19 @@ class LineChart extends Component {
         .attr("stroke-width", 1.5)
         .attr("d", totalLine);
 
-      d3.select(".line-btn").on("click", d => {
-        g.append("path")
+      const opening = g.append("path")
           .datum(data)
-          .attr("class", "linechart-opening")
+          .attr("class", "linechart-opening hide")
           .attr("fill", "none")
           .attr("stroke", "#f54e56")
           .attr("stroke-linejoin", "round")
           .attr("stroke-linecap", "round")
           .attr("stroke-width", 1.5)
           .attr("d", openingLine);
-      })
+
+      d3.select(".line-btn").on("click", () => 
+        opening.classed("linechart-opening hide") ? opening.attr("class", "linechart-opening show") : 
+        opening.attr("class", "linechart-opening hide"))
       
       g.selectAll("circle")
         .data(data)
