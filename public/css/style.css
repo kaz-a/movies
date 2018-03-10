@@ -2,7 +2,7 @@
   cursor: pointer;
   fill: #3ebdb2; }
 
-.node:hover {
+.node:hover, .bar:hover {
   cursor: pointer; }
 
 div.tooltip {
@@ -31,6 +31,9 @@ span.color-text:last-child {
 .bubble-label {
   font-size: 0.5em;
   fill: #fff; }
+
+.bubblechart {
+  padding-left: 50px; }
 
 .content {
   padding: 5% 5%; }

@@ -5,7 +5,7 @@
   fill: $cyan;
 }
 
-.node:hover{
+.node:hover, .bar:hover{
   cursor: pointer;
 } 
 
@@ -42,3 +42,8 @@ span.color-text{
   font-size: 0.5em;
   fill: $white;
 }
+
+.bubblechart {
+  padding-left: 50px;
+}
+

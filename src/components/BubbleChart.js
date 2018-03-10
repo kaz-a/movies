@@ -7,15 +7,15 @@ import StudioChart from './StudioChart';
 
 class BubbleChart extends Component {
   constructor(){
-    super()
+    super();
+    
     this.state = {
       bubbleClicked: false,
       selectedTitle: "",
-      majorGenres: {},
+      majorGenres: [],
       allGenres: {},
       colorRange: [],
-      clickedGenre: "",
-      chipClicked: false
+      genresCutoff: 0
     }
     this.drawBubbles = this.drawBubbles.bind(this);
     this.getGenreTable = this.getGenreTable.bind(this);
@@ -36,7 +36,7 @@ class BubbleChart extends Component {
     const others = _data.filter(d => genres.indexOf(d.key) < 0);
   
     let arr = [];
-    others.forEach(i => { arr.push(i.value) });
+    others.forEach(i => { arr.push(i.value) }); 
     const othersSum = arr.reduce((a, b) => a + b);
 
     let sumTotal;
@@ -45,9 +45,12 @@ class BubbleChart extends Component {
     } else {
       sumTotal = _data.filter(d => d.key === e.genre)[0].value;
     }
-    
-    this.setState({ chipClicked: true, clickedGenre: e.genre });   
-    d3.select(".genre-total").html(`${e.genre}'s gross total was $${Math.round(sumTotal/1000000000)}B`);
+
+    const classname = `.bubble.${e.genre.replace(/\s|\//g, '')}`;  
+    $(classname).css("opacity", 1);
+    $(classname).parent().siblings().children().not(classname).css("opacity", 0.2);
+            
+    d3.select(".genre-total").html(`${e.genre}'s gross total was $${Math.round(sumTotal/1000000000 * 100)/100}B`);
   }
 
   handleBubbleClick(data){
@@ -62,11 +65,9 @@ class BubbleChart extends Component {
 
   drawBubbles(){
     const { data, selectedDate, setupFunc } = this.props;
-    const { selectedGenre, clickedGenre, chipClicked } = this.state;
     const dateFormat = d3.timeFormat("%-m/%-d/%y");
-    const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 700);
+    const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 600);
 
-    // console.log(new Set(data.map(d => d.genre)).size) // 42 unque genres
     let genres = {};
     data.forEach(d => {
       if(genres[d.genre]){
@@ -76,9 +77,12 @@ class BubbleChart extends Component {
       }
     });
 
-    const majorGenres = Object.keys(genres).filter(genre => genres[genre] >= 9);
+    const numUniqueGenres = new Set(data.map(d => d.genre)).size; // 42 unque genres - too many to color code!
+    const genresCutoff = 5;
+    const majorGenres = Object.keys(genres).filter(genre => genres[genre] >= genresCutoff);
     const colorRange8 = ["#b1457b", "#56ae6c", "#5d398b", "#a8a53f", "#6c81d9", "#b86b35", "#ca73c6", "#ba464e"];
-    this.setState({majorGenres, allGenres: genres, colorRange: colorRange8});
+    const colorRange15 = ["#cd772c", "#6d71d8", "#92b440", "#563485", "#61c06d", "#bc72ca", "#40af7a", "#b5508f", "#49d2b7", "#bc4862", "#6a8b3c", "#5e8bd5", "#c1a43d", "#b84e39", "#ad7b3c"];
+    this.setState({majorGenres, allGenres: genres, genresCutoff, colorRange: colorRange15});
     
     const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange8);    
     const pack = d3.pack().size([width, height]).padding(1.5);
@@ -93,17 +97,12 @@ class BubbleChart extends Component {
     node.append("circle")
       .attr("id", d => d.data.title)
       .attr("r", d => d.r)
-      .attr("class", "bubble")
-      .style("fill", d => {
-        return majorGenres.indexOf(d.data.genre) < 0 ? "#000" : color(d.data.genre);
-      })
-      .style("opacity", d => {
-        return dateFormat(d.data.openDate) === dateFormat(selectedDate) ? 1 : 0.2;
-      })
+      .attr("class", d => majorGenres.indexOf(d.data.genre) < 0 ? "bubble Others" : `bubble ${d.data.genre.replace(/\s|\//g, '')}`)
+      .style("fill", d => majorGenres.indexOf(d.data.genre) < 0 ? "#000" : color(d.data.genre))
+      .style("opacity", d => dateFormat(d.data.openDate) === dateFormat(selectedDate) ? 1 : 0.2)
       .on("mouseover", function(d) {
         d3.select(this).transition().ease(d3.easeCubicInOut)
           .duration(200).style("opacity", 1);
-
         tooltip.html(`<span>${d.data.title}</span><br />
             Total gross: $${Math.round(d.data.totalGross/1000000)}M<br/>
             Genre: ${d.data.genre}<br/>
@@ -114,8 +113,10 @@ class BubbleChart extends Component {
       })
       .on("mouseout", function(d) {
         tooltip.style("opacity", 0);
-        d3.select(this).transition().ease(d3.easeCubicInOut)
+        
+          d3.select(this).transition().ease(d3.easeCubicInOut)
           .duration(200).style("opacity", 0.2);
+        
       })
       .on("click", d => this.handleBubbleClick(d.data.title));
 
@@ -132,9 +133,11 @@ class BubbleChart extends Component {
  
   } 
 
-  // aggregate genre table with color and count, and add 'others' genre
+  // aggregate genre table with color and count, and add 'others' genre for
+  // genres that have less than 9 counts
   getGenreTable(){
     const { majorGenres, allGenres, colorRange } = this.state;
+    const { data } = this.props;
     
     function getTable(genreArr, colorArr){
       let returnData = [];
@@ -159,15 +162,20 @@ class BubbleChart extends Component {
     }
 
     const dataTable = getTable(majorGenres, colorRange);
-    const otherCount = Object.keys(allGenres).length - dataTable.length;
+    const otherCount = data.filter(d => majorGenres.indexOf(d.genre) < 0).length;
     dataTable.push({"genre": "Others", "color": "#000", "count": otherCount})
     return dataTable.sort((a, b) => b.count - a.count);
   }
 
   render(){
-    const { bubbleClicked, selectedTitle } = this.state;
+    const { bubbleClicked, selectedTitle, genresCutoff } = this.state;
     const { data, setupFunc } = this.props;
     const genres = this.getGenreTable();
+    const text = `Each circle is a movie title, sized by total gross $ and colored by genre.
+                Genres with less than ${genresCutoff} releases are categorized as "Others".  
+                Click on a circle to learn which studio released this movie and 
+                how this studio did against others.` 
+                
 
     return (
       <div>
@@ -175,13 +183,8 @@ class BubbleChart extends Component {
           <div className="row">
             <div className="col-md-4 text">
               <h3>What movies were doing well during these 3 years?</h3>
-              <p>While <em>Star Wars: The Force Awakens</em> had the largest revenue,
-                it was one of the rarest genre of movie made during this period. 
-                Each circle is a movie title, sized by total gross $ and colored by genre.
-                Genres with less than 9 releases are categorized as "Others".  
-                Click on a circle to learn which studio released this movie and 
-                how this studio did against others.
-                <span className="info"></span>(change hightlight by selecting another date on line chart)
+              <p><em>Star Wars </em>was very popular, and Action / Adventure and Animation made the top revenue. {text}
+                <span className="info"></span>(change hightlight by selecting another date on line chart, or selecting genres below)
               </p>
               
               <div className="genres">

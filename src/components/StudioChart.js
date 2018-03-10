@@ -4,8 +4,7 @@ import * as d3 from 'd3';
 
 class StudioChart extends Component {
   constructor(){
-    super()
-    this.darwBars = this.drawBars.bind(this);
+    super();
   }
 
   componentDidMount(){
@@ -77,6 +76,7 @@ class StudioChart extends Component {
           d3.select(this).transition().ease(d3.easeCubicInOut)
             .duration(500).style("fill", "#3ebdb2");
         });
+        
     });
   }
   
@@ -86,8 +86,8 @@ class StudioChart extends Component {
         <div className="row">
           <div className="col-md-4 text">
             <h3>Which studio did well and how did it perform against others?</h3>
-            <p>Many of the major money-generating movies seem to come out of BV, followed by Universal, Fox, and WB. 
-            BV was particularly doing well thanks to all the popularity of Star Wars, which in total generated nearly $1.5B.
+            <p>No other studios came even close to BV (Disney) in terms of toal gross revenue. 
+            Click on a bar for the studio you are interested in, and you will see the insights of your choice.
             <span className="studioinfo"></span>(change hightlight by selecting another movie on bubble chart)
             </p>
           </div> 
