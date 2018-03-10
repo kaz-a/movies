@@ -50,7 +50,7 @@ class BubbleChart extends Component {
     $(classname).css("opacity", 1);
     $(classname).parent().siblings().children().not(classname).css("opacity", 0.2);
             
-    d3.select(".genre-total").html(`${e.genre}'s gross total was $${Math.round(sumTotal/1000000000 * 100)/100}B`);
+    d3.select(".genre-total").html(`${e.genre}'s gross total was <span>$${Math.round(sumTotal/1000000000 * 100)/100}B</span>`);
   }
 
   handleBubbleClick(data){
@@ -176,7 +176,6 @@ class BubbleChart extends Component {
                 Click on a circle to learn which studio released this movie and 
                 how this studio did against others.` 
                 
-
     return (
       <div>
         <div className="content movie-titles">
@@ -202,9 +201,13 @@ class BubbleChart extends Component {
                 })
               }
               </div>
-              <div className="genre-total"></div>
+              
             </div> 
-            <div className="col-md-8 bubblechart"></div>
+            
+            <div className="col-md-8">
+              <div className="bubblechart"></div>
+              <div className="genre-total"></div>
+            </div>
           </div>
         </div>
         <div>

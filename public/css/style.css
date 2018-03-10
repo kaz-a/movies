@@ -35,6 +35,11 @@ span.color-text:last-child {
 .bubblechart {
   padding-left: 50px; }
 
+.genre-total {
+  text-align: center; }
+  .genre-total span {
+    font-size: 2em; }
+
 .content {
   padding: 5% 5%; }
 

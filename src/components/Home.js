@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 const animate = () => {
   $(".home-button").click(() => {
@@ -17,7 +17,10 @@ const Home = () => {
       What kind of movies should I make so I can make more money?<br/>
       And what studio should I belong in order to be successful?<br/>
       </p>
-      <RaisedButton label="Play" className="home-button" primary={true} style={{margin:12}} onClick={animate()} />
+      
+      <FloatingActionButton className="home-button" style={{color: "#fff"}} onCick={animate()}>
+        <h4>&#9662;</h4>
+      </FloatingActionButton>
     </div>
   )
 }

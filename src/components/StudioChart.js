@@ -86,8 +86,8 @@ class StudioChart extends Component {
         <div className="row">
           <div className="col-md-4 text">
             <h3>Which studio did well and how did it perform against others?</h3>
-            <p>No other studios came even close to BV (Disney) in terms of toal gross revenue. 
-            Click on a bar for the studio you are interested in, and you will see the insights of your choice.
+            <p>I was not sure what BV stands for, so I did a google search and found out it was actually Disney! 
+            Not to my surprise, they are doing very well.
             <span className="studioinfo"></span>(change hightlight by selecting another movie on bubble chart)
             </p>
           </div> 
