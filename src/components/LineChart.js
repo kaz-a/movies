@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -21,12 +21,12 @@ class LineChart extends Component {
 
   handleCircleClick(data){
     if(this.state.circleClicked){
-      this.setState({ circleClicked: false, selectedDate: "" });
+      this.setState({circleClicked: false, selectedDate: ""});
     }
-    this.setState({ circleClicked: true, selectedDate: data });
+    this.setState({circleClicked: true, selectedDate: data});
 
     const scrollHeight = $(".home").height() + $(".timetrend").height() + 100;
-    $("html, body").animate({ scrollTop: scrollHeight }, 600);
+    $("html, body").animate({scrollTop: scrollHeight}, 600);
   }
 
   drawLines(){
@@ -40,7 +40,7 @@ class LineChart extends Component {
         d.totalGross = +d.total_gross;
       })
 
-      const { dateFormat, margin, width, height, svg, g, tooltip } = this.props.setupFunc("linechart", 400);
+      const {dateFormat, margin, width, height, svg, g, tooltip} = this.props.setupFunc("linechart", 400);
       const x = d3.scaleTime().range([0, width]), y = d3.scaleLinear().range([height, 0]); 
       const min = d3.min(data, d => d.totalGross), max = d3.max(data, d => d.totalGross);
 
@@ -101,12 +101,10 @@ class LineChart extends Component {
       g.selectAll("circle")
         .data(data)
         .enter().append("circle")
-        // .filter(d => d.totalGross >= 300000000)
         .attr("class", "linechart-circle")
         .attr("r", 3.5)
         .attr("cx", d => x(d.openDate))
         .attr("cy", d => y(d.totalGross))  
-        // .attr("fill", "#3ebdb2")
         .attr("fill", d => d.totalGross >= 300000000 ? "#3ebdb2" : d.totalGross >= 100000000 ? "#b49a3d" : "#023460")
         .attr("stroke", "#3ebdb2")
         .on("mouseover", function(d) {
@@ -128,8 +126,8 @@ class LineChart extends Component {
   }
 
   render(){
-    const { data, setupFunc } = this.props;
-    const { circleClicked, selectedDate } = this.state;
+    const {data, setupFunc} = this.props;
+    const {circleClicked, selectedDate} = this.state;
 
     return (
       <div>
@@ -149,7 +147,7 @@ class LineChart extends Component {
         </div>
         <div>
         {
-          circleClicked ? <BubbleChart data={ data } selectedDate={ selectedDate } setupFunc={ setupFunc } /> : ""
+          circleClicked ? <BubbleChart data={data} selectedDate={selectedDate} setupFunc={setupFunc} /> : ""
         }
         </div>
       </div>

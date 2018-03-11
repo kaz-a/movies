@@ -5,7 +5,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 const buttonScroll = () => {
   $(".home-button").click(() => {
     const scrollHeight = $(".home").height() + 20;
-    $("html, body").animate({ scrollTop: scrollHeight }, 600);
+    $("html, body").animate({scrollTop: scrollHeight}, 600);
   })
 }
 

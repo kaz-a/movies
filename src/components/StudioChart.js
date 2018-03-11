@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 
@@ -12,8 +12,8 @@ class StudioChart extends Component {
   }
 
   drawBars(){
-    const { data, selectedTitle, setupFunc } = this.props;     
-    const studio = data.filter(d => d.title === selectedTitle); // get the data that contains the selectedTitle
+    const {data, selectedTitle, setupFunc} = this.props;     
+    const studio = data.filter(d => d.title === selectedTitle); 
     d3.select(".studioinfo").append("html")
       .html(`<em>*Highlighting studio ${studio[0].studio} that released ${selectedTitle}</em>`);
 
@@ -25,7 +25,7 @@ class StudioChart extends Component {
         d.totalGross = +d.total_gross;
       })
 
-      const { dateFormat, margin, width, height, svg, g, tooltip } = setupFunc("studiochart", 400);
+      const {dateFormat, margin, width, height, svg, g, tooltip} = setupFunc("studiochart", 400);
       const x = d3.scaleBand().range([0, width]).padding(0.1), y = d3.scaleLinear().range([height, 0]);
 
       x.domain(data.map(d => d.studio));

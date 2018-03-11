@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import Avatar from 'material-ui/Avatar';
@@ -28,7 +28,7 @@ class BubbleChart extends Component {
   }
 
   handleChipClick(e){
-    const { data } = this.props;
+    const {data} = this.props;
     const _data = d3.nest().key(d => d.genre).rollup(f => d3.sum(f, d => +d.total_gross)).entries(data);
     
     // create others table with aggregated totals
@@ -36,7 +36,7 @@ class BubbleChart extends Component {
     const others = _data.filter(d => genres.indexOf(d.key) < 0);
   
     let arr = [];
-    others.forEach(i => { arr.push(i.value) }); 
+    others.forEach(i => arr.push(i.value)); 
     const othersSum = arr.reduce((a, b) => a + b);
 
     let sumTotal;
@@ -56,18 +56,18 @@ class BubbleChart extends Component {
 
   handleBubbleClick(data){
     if(this.state.bubbleClicked){
-      this.setState({ bubbleClicked: false, selectedTitle: "" });
+      this.setState({bubbleClicked: false, selectedTitle: ""});
     }
-    this.setState({ bubbleClicked: true, selectedTitle: data });
+    this.setState({bubbleClicked: true, selectedTitle: data});
 
-    const scrollHeight = $(".home").height() + $(".timetrend").height() + $(".movie-titles").height() + 100;
-    $("html, body").animate({ scrollTop: scrollHeight }, 600);
+    const scrollHeight = $(".home").height() + $(".timetrend").height() + $(".movie-titles").height();
+    $("html, body").animate({scrollTop: scrollHeight}, 600);
   }
 
   drawBubbles(){
-    const { data, selectedDate, setupFunc } = this.props;
+    const {data, selectedDate, setupFunc} = this.props;
     const dateFormat = d3.timeFormat("%-m/%-d/%y");
-    const { margin, width, height, svg, tooltip } = setupFunc("bubblechart", 570);
+    const {margin, width, height, svg, tooltip} = setupFunc("bubblechart", 570);
 
     let genres = {};
     data.forEach(d => {
@@ -79,15 +79,14 @@ class BubbleChart extends Component {
     });
 
     const numUniqueGenres = new Set(data.map(d => d.genre)).size; // 42 unque genres - too many to color code!
-    const genresCutoff = 5;
-    const majorGenres = Object.keys(genres).filter(genre => genres[genre] >= genresCutoff);
-    const colorRange8 = ["#b1457b", "#56ae6c", "#5d398b", "#a8a53f", "#6c81d9", "#b86b35", "#ca73c6", "#ba464e"];
-    const colorRange15 = ["#cd772c", "#6d71d8", "#92b440", "#563485", "#61c06d", "#bc72ca", "#40af7a", "#b5508f", "#49d2b7", "#bc4862", "#6a8b3c", "#5e8bd5", "#c1a43d", "#b84e39", "#ad7b3c"];
-    this.setState({majorGenres, allGenres: genres, genresCutoff, colorRange: colorRange15});
+    const genresCutoff = 5; // categorize genres that have less than this number of movies as 'Others'
+    const majorGenres = Object.keys(genres).filter(genre => genres[genre] >= genresCutoff); 
+    const colorRange = ["#cd772c", "#6d71d8", "#92b440", "#563485", "#61c06d", "#bc72ca", "#40af7a", "#b5508f", "#49d2b7", "#bc4862", "#6a8b3c", "#5e8bd5", "#c1a43d", "#b84e39", "#ad7b3c"];
+    this.setState({majorGenres, allGenres: genres, genresCutoff, colorRange});
     
-    const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange15);    
+    const color = d3.scaleOrdinal().domain(majorGenres).range(colorRange);    
     const pack = d3.pack().size([width, height]).padding(1.5);
-    const root = d3.hierarchy({ children: data }).sum(d => d.totalGross);
+    const root = d3.hierarchy({children: data}).sum(d => d.totalGross);
 
     const node = svg.selectAll(".node")
       .data(pack(root).leaves())
@@ -133,10 +132,10 @@ class BubbleChart extends Component {
   } 
 
   // aggregate genre table with color and count, and add 'others' genre for
-  // genres that have less than 9 counts
+  // genres that have less than the this.state.genresCutoff counts
   getGenreTable(){
-    const { majorGenres, allGenres, colorRange } = this.state;
-    const { data } = this.props;
+    const {majorGenres, allGenres, colorRange} = this.state;
+    const {data} = this.props;
     
     function getTable(genreArr, colorArr){
       let returnData = [];
@@ -167,14 +166,14 @@ class BubbleChart extends Component {
   }
 
   render(){
-    const { bubbleClicked, selectedTitle, genresCutoff } = this.state;
-    const { data, setupFunc } = this.props;
+    const {bubbleClicked, selectedTitle, genresCutoff} = this.state;
+    const {data, setupFunc} = this.props;
     const genres = this.getGenreTable();
     const text = `Each circle is a movie title, sized by total gross $ and colored by genre.
                 Genres with less than ${genresCutoff} releases are categorized as "Others".  
                 Click on a circle to learn which studio released this movie and 
                 how this studio did against others.` 
-                
+
     return (
       <div>
         <div className="content movie-titles">

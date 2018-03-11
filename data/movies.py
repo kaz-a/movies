@@ -1,6 +1,6 @@
 import pandas as pd
-import re
 
+# clean up Copy of movies.csv
 filename = 'Copy of movies.csv'
 df = pd.read_csv(filename)
 
@@ -11,7 +11,6 @@ df['Opening Gross'] = df['Opening Gross'].str.replace(r'[\s,$]', '')
 pd.to_numeric(df['Opening Gross'])
 
 col_headers = list(df)
-
 new_colheaders = []
 
 for header in col_headers:
@@ -20,10 +19,10 @@ for header in col_headers:
     header = header.replace(' ', '_')
   new_colheaders.append(header)
 
-print(df)
 df.to_csv('movies.csv', header=new_colheaders)
 
 
+# create 3 csvs from cleaned csv
 def save_file(col_name, file_name):
   df = pd.read_csv('movies.csv')
   if col_name == 'open_date':
@@ -35,7 +34,6 @@ def save_file(col_name, file_name):
   data.sort_values(by=col_name)
   if 'open_date' in data:
     data['open_date'] = data['open_date'].dt.strftime('%-m/%-d/%y')
-  print(data)
 
   data.to_csv(file_name + '.csv')
 
