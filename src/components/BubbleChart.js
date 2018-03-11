@@ -102,8 +102,8 @@ class BubbleChart extends Component {
       .style("fill", d => majorGenres.indexOf(d.data.genre) < 0 ? "#000" : color(d.data.genre))
       .style("opacity", d => dateFormat(d.data.openDate) === dateFormat(selectedDate) ? 1 : 0.2)
       .on("mouseover", function(d) {
-        d3.select(this).transition().ease(d3.easeCubicInOut)
-          .duration(200).style("opacity", 1);
+        // d3.select(this).transition().ease(d3.easeCubicInOut)
+        //   .duration(200).style("opacity", 1);
         tooltip.html(`<span>${d.data.title}</span><br />
             Total gross: $${Math.round(d.data.totalGross/1000000)}M<br/>
             Genre: ${d.data.genre}<br/>
@@ -114,10 +114,8 @@ class BubbleChart extends Component {
       })
       .on("mouseout", function(d) {
         tooltip.style("opacity", 0);
-        
-        d3.select(this).transition().ease(d3.easeCubicInOut)
-          .duration(200).style("opacity", 0.2);
-        
+        // d3.select(this).transition().ease(d3.easeCubicInOut)
+        //   .duration(200).style("opacity", 0.2);
       })
       .on("click", d => this.handleBubbleClick(d.data.title));
 
