@@ -183,7 +183,7 @@ class BubbleChart extends Component {
           <div className="row">
             <div className="col-md-4 text">
               <h3>What movies were doing well during these 3 years?</h3>
-              <p><em>Star Wars </em>was very popular, and Action / Adventure and Animation made the top revenue. {text}
+              <p><em>Star Wars </em>was very popular, and Action / Adventure and Animation made the top genre. {text}
                 <span className="info"></span>(change hightlight by selecting another date on line chart or selecting a genre below)
               </p>
               

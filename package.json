@@ -22,13 +22,17 @@
     "webpack-cli": "^2.0.10"
   },
   "devDependencies": {},
+  "engines": {
+    "node": "9.0.0",
+    "npm": "5.5.1"
+  },
   "scripts": {
     "postinstall": "webpack & node-sass public/css/scss -o public/css",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "webpack": "./node_modules/webpack/bin/webpack.js",
     "build:css": "node-sass -w -r public/css/scss/ -o public/css",
-    "build": "npm run webpack -- -w & nodemon --ignore src/ --ignore dist/ server.js"
+    "start:dev": "npm run webpack -- -w & nodemon --ignore src/ --ignore dist/ server.js"
   },
   "keywords": [],
   "author": "",
