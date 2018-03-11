@@ -1,16 +1,13 @@
 import pandas as pd
+import re
 
 filename = 'Copy of movies.csv'
 df = pd.read_csv(filename)
 
-df['Total Gross'] = df['Total Gross'].str.replace(r'$', '')
-df['Total Gross'] = df['Total Gross'].str.replace(r',', '')
-df['Total Gross'] = df['Total Gross'].str.replace(r' ', '')
+df['Total Gross'] = df['Total Gross'].str.replace(r'[\s,$]', '')
 pd.to_numeric(df['Total Gross'])
 
-df['Opening Gross'] = df['Opening Gross'].str.replace(r'$', '')
-df['Opening Gross'] = df['Opening Gross'].str.replace(r',', '')
-df['Opening Gross'] = df['Opening Gross'].str.replace(r' ', '')
+df['Opening Gross'] = df['Opening Gross'].str.replace(r'[\s,$]', '')
 pd.to_numeric(df['Opening Gross'])
 
 col_headers = list(df)
