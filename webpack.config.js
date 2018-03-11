@@ -6,17 +6,12 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js'
   }, 
-  devServer: {
-    inline: false,
-    contentBase: "./dist",
-  },
-  watch: true,
   module: {
     loaders: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: path.resolve(__dirname, './node_modules/babel-loader'),
+        loader: 'babel-loader',
         query: {
           presets: [ 'es2015', 'react']
         }
