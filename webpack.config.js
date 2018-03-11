@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -7,6 +6,10 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js'
   }, 
+  devServer: {
+    inline: false,
+    contentBase: "./dist",
+  },
   watch: true,
   module: {
     loaders: [
